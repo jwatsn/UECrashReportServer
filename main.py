@@ -24,7 +24,11 @@ app = FastAPI()
 
 @app.post("/report")
 async def crash_report(UserID : str,compressed : Annotated[bytes, Body()]):
-    crash_data = zlib.decompress(compressed);
+    try:
+        crash_data = zlib.decompress(compressed)
+    except zlib.error:
+        print("Invalid data!")
+        return
     
     data_size = len(crash_data)
 
